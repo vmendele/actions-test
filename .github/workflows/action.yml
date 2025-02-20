@@ -8,7 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: dev
+    environment:
+      name: dev
+      url: "https://services-dev.logitud.fr"
 
     steps:    
       - name: Configure SSH
