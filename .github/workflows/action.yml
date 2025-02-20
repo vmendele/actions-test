@@ -21,6 +21,7 @@ jobs:
       #        HostName 51.255.234.46
       #        User gitlab-ci
       #        IdentityFile ~/.ssh/id_nice
+      - run: mkdir ~/.ssh
       - run: |
           cat << EOF > ~/.ssh/id_nice
           ${{ secrets.SSH_PRIVATE_KEY }}
