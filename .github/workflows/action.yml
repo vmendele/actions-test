@@ -22,8 +22,5 @@ jobs:
               User gitlab-ci
               IdentityFile ~/.ssh/id_nice
     
-      - uses: arwynfr/actions-docker-context@v2
-        with:
-          docker_host: 'ssh://nice'
-          context_name: 'dev-server'
+      - run: docker context create nice --docker "ssh://nice"
       - run: docker --context dev-server ps
