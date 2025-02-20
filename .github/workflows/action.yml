@@ -10,10 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:    
+      - name: Install SSH key of bastion
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          name: id_nice
+          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+          config: |
+            Host nice
+              HostName 51.255.234.46
+              User gitlab-ci
+              IdentityFile ~/.ssh/id_nice
+    
       - uses: arwynfr/actions-docker-context@v2
         with:
-          docker_host: 'ssh://gitlab-ci@services-dev.logitud.fr'
+          docker_host: 'ssh://nice'
           context_name: 'dev-server'
-          ssh_cert: ${{ secrets.SSH_CERT }}
-          ssh_key: ${{ secrets.SSH_KEY }}
       - run: docker --context dev-server ps
