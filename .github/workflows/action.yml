@@ -16,7 +16,7 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/staging.key
           chmod 600 ~/.ssh/staging.key
           cat >>~/.ssh/config <<END
-          Host nice
+          Host nice-ci
             HostName 51.255.234.46
             User $SSH_USER
             IdentityFile ~/.ssh/staging.key
@@ -27,7 +27,7 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_KNOWN_HOSTS }}
       - run: ssh staging 'ls -la'
-      - run: docker context create nice --docker "host=ssh://nice"
+      - run: docker context create nice --docker "host=ssh://nice-ci"
       - run: docker context use nice
       - run: docker ps
       #- name: Install SSH key of bastion
