@@ -16,3 +16,4 @@ jobs:
           context_name: 'dev-server'
           ssh_cert: ${{ secrets.SSH_CERT }}
           ssh_key: ${{ secrets.SSH_KEY }}
+      - run: docker ps
