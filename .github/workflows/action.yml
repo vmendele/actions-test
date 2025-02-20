@@ -13,50 +13,20 @@ jobs:
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/staging.key
-          chmod 600 ~/.ssh/staging.key
+          echo "$SSH_KEY" > ~/.ssh/nice.key
+          chmod 600 ~/.ssh/nice.key
           cat >>~/.ssh/config <<END
-          Host staging
+          Host nice
             HostName 51.255.234.46
             User $SSH_USER
-            IdentityFile ~/.ssh/staging.key
+            IdentityFile ~/.ssh/nice.key
             StrictHostKeyChecking no
           END
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_KNOWN_HOSTS }}
-      - run: ssh staging 'ls -la'
-      - run: docker context create nice --docker "host=ssh://staging"
+      - run: ssh nice 'ls -la'
+      - run: docker context create nice --docker "host=ssh://nice"
       - run: docker context use nice
       - run: docker ps
-      #- name: Install SSH key of bastion
-      #  uses: shimataro/ssh-key-action@v2
-      #  with:
-      #    key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #    name: id_nice
-      #    known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
-      #    config: |
-      #      Host nice
-      #        HostName 51.255.234.46
-      #        User gitlab-ci
-      #        IdentityFile ~/.ssh/id_nice
-      
-      #- run: mkdir ~/.ssh
-      #- run: |
-      #    cat << EOF > ~/.ssh/id_nice
-      #    ${{ secrets.SSH_PRIVATE_KEY }}
-      #    EOF
-      #- run: |
-      #    cat << EOF > ~/.ssh/id_nice.pub
-      #    ${{ secrets.SSH_KNOWN_HOSTS }}
-      #    EOF
-      #- run: |
-      #    cat << EOF > ~/.ssh/config
-      #    Host nice
-      #        HostName 51.255.234.46
-      #        User gitlab-ci
-      #        IdentityFile ~/.ssh/id_nice
-      #    EOF
-      #- run: docker context create nice --docker "host=ssh://nice"
-      #- run: docker --context nice ps
